@@ -1,0 +1,61 @@
+%\vspace{-0.5cm}
+\section{Related Work}
+\vspace{-0.2cm}
+%GPU workload characterization has been studied for over a decade. Reference \cite{Liworkloads} proposed a set of characterizing a workload
+%to evaluate the performance of a GPU microarchitecture. However, our concern is the impact of resource contentions 
+%on the performance of multiple applications. In FLARE, the performance affected by a specific GPU architecture is simulated by the data 
+%of those carefully designed microbenchmarks run offline.
+%Performance prediction and resource partitioning for co-located applications on CPU 
+%platforms have attracted significant attention. Bubble-Up~\cite{Mars:MICRO2011},
+%Octopus-Man~\cite{Petrucci:HPCA2015}, and SMiTe~\cite{Zhang:2014} use profiling data of 
+%the target applications to characterize performance degradation on real CPU systems, 
+%but the LC applications may be submitted by data center users and hence not available 
+%for detailed profiling and characterization. In comparison, we do not assume the
+%availability of the LC applications and purely rely on micro benchmarks and online 
+%configuration search to guarantee QoS. Multiple systems use online profiling and
+%adaptive resource partitioning to provide flexibility~\cite{Zhu+:ASPLOS16,Lo:2015}, 
+%but unlike FLARE they do not leverage micro benchmarks to reduce search overhead.
+%Moreover, researchers have proposed cache partitioning approaches to guaranteeing QoS 
+%of LC applications~\cite{Kasture:ASPLOS14,Lin:HPCA08,Ye:PACT14,Sayed:HPCA18} on CPUs.
+%A linear model is assumed in SMiTe. However, our experiments have shown that linear model doesn't work well for GPU.
+Researchers have proposed architectural extensions to allow %\nsout{efficient application}{}
+applications to co-run efficiently
+on the same GPU, with emphasis on cache sharing and bypassing~\cite{Liang:ICCAD17},
+fine-grained sharing~\cite{Wang:ISCA2017},
+preemption~\cite{Park+:ASPLOS15,Tanasic+:ISCA14}, dynamic resource management~\cite{Park:ASPLOS17}, 
+and spatial multi-tasking~\cite{Adriaens+:HPCA12,slate2019}. The work \cite{Wang:ISCA2017} deals with spatial sharing through an enhanced scheduler (both thread block and warp level) to 
+guarantee QoS. They use a quota to represent the QoS constraint. They assume that thread blocks are uniform in cost and the quota needs to reach zero at each epoch to satisfy QoS. To further improve 
+the performance, they implement dynamic resource allocation by monitoring idle warps during each epoch. %The idle warp counter and enhanced scheduler
+%are rarely available to a programmer. }
+On the one hand, those techniques remain to be
+carefully evaluated for implementation in real GPUs. On the other hand, those studies do
+not systematically address reducing search overhead to find the best strategy for GPU sharing. 
+Studies~\cite{Liang:TPDS15} have demonstrated 
+that multi-tasking on GPUs can better utilize the hardware resource, 
+but none of them predict performance degradation due to the co-running. 
+Software systems, such as FLEP~\cite{Wu:ASPLOS2017} and EffiSha~\cite{Chen:PPoPP2017},
+focus on lightweight preemption support but do not particularly study QoS enforcement.
+Baymax~\cite{Chen+:ASPLOS16} and Prophet~\cite{Chen:ASPLOS2017} predict GPU workload
+performance and use task re-ordering to handle QoS. 
+Their approach to coordinate data transfers can be directly incorporated in 
+FLARE to form a more general solution. Since they assume the GPUs are non-preemptable, % co-processors, 
+they may use FLARE's methodology to further improve GPU utilization.\\
+Another line of interesting work is practical GPU sharing in virtual environments, 
+for which Hong et al. provide a comprehensive survey~\cite{Hong:ACSU}. 
+We briefly discuss several closely related studies. FairGV~\cite{Hong:TPDS17} 
+achieves system-wide weighted fair sharing among GPU applications through 
+collaborative scheduling and an accurate accounting mechanism. 
+Gloop~\cite{Suzuki:SOCC17} proposes a new programming model to generate scheduling points in GPU kernels, 
+which enables flexible suspending/resuming execution of GPU applications. 
+Tian et al. propose a software system to virtualize Intel on-chip GPUs for graphics workloads~\cite{Tian+:ATC14}. 
+None of these approaches have addressed fine-grained sharing or QoS of user-facing applications. 
+To share the GPU memory %between applications, 
+GPUvm~\cite{Suzuki+:ATC14} partitions 
+the GPU memory into regions and assign the regions to virtual machines. 
+GPUswap~\cite{Kehne+:VEE15} automatically coordinates GPU memory usage between applications 
+even if the aggregate workload does not fit in GPU physical memory. 
+%Although GPU virtualization solve the co-run to a certain extent, 
+%the purpose of the virtualization is to separate GPU environment so that one application would not experience the existence of other applications. 
+%Though FLARE is focused on the sharing of computational resources, 
+%there is a potential to integrate these approaches in FLARE into hypervisor of GPU virtualization to provide a more comprehensive system. 
+
